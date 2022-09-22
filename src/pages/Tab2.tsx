@@ -20,7 +20,7 @@ import { usePictureGallery } from '../hooks/usePictureGallery';
 import './Tab2.css';
 
 const Tab2: React.FC = () => {
-  const { pictures, takePicture } = usePictureGallery(); 
+  const { pictures, takePicture } = usePictureGallery();
 
   return (
     <IonPage>
