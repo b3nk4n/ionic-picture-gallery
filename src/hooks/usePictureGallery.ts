@@ -17,12 +17,20 @@ export function usePictureGallery() {
   const [pictures, setPictures] = useState<TakenPicture[]>([]);
 
   const savePicture = async (photo: Photo, fileName: string): Promise<TakenPicture> => {
-    const base64Data = await base64FromPath(photo.webPath!);
+    const base64Data = await base64FromPhoto(photo);
     const savedFile = await Filesystem.writeFile({
       path: fileName,
       data: base64Data,
       directory: Directory.Data,
     });
+
+    if (isPlatform('hybrid')) {
+      // Display new image by rewriting the file:// path to HTTP
+      return {
+        filePath: savedFile.uri,
+        webviewPath: Capacitor.convertFileSrc(savedFile.uri)
+      };
+    }
 
     return {
       filePath: fileName,
@@ -36,14 +44,16 @@ export function usePictureGallery() {
       const { value } = await Preferences.get({ key: PICTURE_STORAGE });
       const picturesInPreferences = (value ? JSON.parse(value) : []) as TakenPicture[];
 
-      for (let picture of picturesInPreferences) {
-        const file = await Filesystem.readFile({
-          path: picture.filePath,
-          directory: Directory.Data,
-        });
-
-        // Web platform only: Load the picture as base64 data
-        picture.webviewPath = `data:image/jpeg;base64,${file.data}`;
+      if (!isPlatform('hybrid')) {
+        for (let picture of picturesInPreferences) {
+          const file = await Filesystem.readFile({
+            path: picture.filePath,
+            directory: Directory.Data,
+          });
+  
+          // Web platform only: Load the picture as base64 data, because Filesystem API uses IndexedDB under the hood
+          picture.webviewPath = `data:image/jpeg;base64,${file.data}`;
+        }
       }
       setPictures(picturesInPreferences);
     };
@@ -74,7 +84,7 @@ export function usePictureGallery() {
   };
 }
 
-export async function base64FromPath(path: string): Promise<string> {
+async function base64FromPath(path: string): Promise<string> {
   const response = await fetch(path);
   const blob = await response.blob();
 
@@ -90,4 +100,15 @@ export async function base64FromPath(path: string): Promise<string> {
     };
     reader.readAsDataURL(blob);
   });
+}
+
+async function base64FromPhoto(photo: Photo): Promise<string> {
+  if (isPlatform('hybrid')) {
+    const file = await Filesystem.readFile({
+      path: photo.path!
+    });
+    return file.data;
+  }
+  // web
+  return await base64FromPath(photo.webPath!);
 }
