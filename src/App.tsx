@@ -11,7 +11,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { images, triangle, desktop, phonePortrait } from 'ionicons/icons';
+import { albums, images, desktop, phonePortrait } from 'ionicons/icons';
 import PictureSliderTab from './pages/PictureSliderTab';
 import PicturesTab from './pages/PicturesTab';
 import PlatformsTab from './pages/PlatformsTab';
@@ -45,29 +45,29 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route exact path="/tab1">
+            <Route exact path="/picture-slider">
               <PictureSliderTab />
             </Route>
-            <Route exact path="/tab2">
+            <Route exact path="/pictures">
               <PicturesTab />
             </Route>
-            <Route path="/tab3">
+            <Route path="/platforms">
               <PlatformsTab />
             </Route>
             <Route exact path="/">
-              <Redirect to="/tab1" />
+              <Redirect to="/pictures" />
             </Route>
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
-            <IonTabButton tab="tab1" href="/tab1">
-              <IonIcon icon={triangle} />
-              <IonLabel>Tab 1</IonLabel>
+            <IonTabButton tab="picture-slider" href="/picture-slider">
+              <IonIcon icon={albums} />
+              <IonLabel>Picture Slider</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="tab2" href="/tab2">
+            <IonTabButton tab="pictures" href="/pictures">
               <IonIcon icon={images} />
               <IonLabel>Pictures</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="tab3" href="/tab3">
+            <IonTabButton tab="platforms" href="/platforms">
               <IonIcon icon={platformIcon} />
               <IonLabel>Platforms</IonLabel>
             </IonTabButton>
