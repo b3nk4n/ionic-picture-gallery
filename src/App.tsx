@@ -12,6 +12,7 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { albums, images, desktop, phonePortrait } from 'ionicons/icons';
+import { usePictureGallery } from './hooks/usePictureGallery';
 import PictureSliderTab from './pages/PictureSliderTab';
 import PicturesTab from './pages/PicturesTab';
 import DebugTab from './pages/DebugTab';
@@ -38,6 +39,7 @@ import './theme/variables.css';
 setupIonicReact();
 
 const App: React.FC = () => {
+  const { pictures, takePicture, deletePicture } = usePictureGallery();
   const platformIcon = isPlatform('hybrid') ? phonePortrait : desktop;
 
   return (
@@ -49,10 +51,14 @@ const App: React.FC = () => {
               <PictureSliderTab />
             </Route>
             <Route exact path="/pictures">
-              <PicturesTab />
+              <PicturesTab
+                pictures={pictures}
+                takePicture={takePicture}
+                deletePicture={deletePicture}
+              />
             </Route>
             <Route path="/debug">
-              <DebugTab />
+              <DebugTab pictures={pictures} />
             </Route>
             <Route exact path="/">
               <Redirect to="/pictures" />

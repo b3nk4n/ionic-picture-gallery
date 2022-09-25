@@ -14,13 +14,18 @@ import {
   IonImg,
   IonActionSheet,
 } from '@ionic/react';
+import { TakenPicture } from '../hooks/usePictureGallery';
 import { camera, trash, close } from 'ionicons/icons';
-import { usePictureGallery, TakenPicture } from '../hooks/usePictureGallery';
 
 import './PicturesTab.css';
 
-const PicturesTab: React.FC = () => {
-  const { pictures, takePicture, deletePicture } = usePictureGallery();
+interface Props {
+  pictures: TakenPicture[],
+  takePicture(): Promise<void>,
+  deletePicture(picture: TakenPicture): Promise<void>
+}
+
+const PicturesTab: React.FC<Props> = ({ pictures, takePicture, deletePicture }: Props) => {
   const [pictureToDelete, setPictureToDelete] = useState<TakenPicture | null>(null)
 
   return (
