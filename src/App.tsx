@@ -41,7 +41,7 @@ import './theme/variables.css';
 setupIonicReact();
 
 const App: React.FC = () => {
-  const { pictures, takePicture, deletePicture } = usePictureGallery();
+  const { pictures, takePicture, renamePicture, deletePicture } = usePictureGallery();
   const platformIcon = isPlatform('hybrid') ? phonePortrait : desktop;
 
   return (
@@ -62,6 +62,7 @@ const App: React.FC = () => {
             <Route exact path="/pictures/view/:fileName">
               <PictureDetailsPage 
                 pictures={pictures}
+                renamePicture={renamePicture}
                 deletePicture={deletePicture}
               />
             </Route>

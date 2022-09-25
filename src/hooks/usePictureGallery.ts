@@ -98,9 +98,34 @@ export function usePictureGallery() {
     setPictures(filteredPictures)
   };
 
+  const renamePicture = async (picture: TakenPicture, name: string) => {
+    const fileName = picture.filePath.substring(picture.filePath.lastIndexOf('/') + 1)
+    await Filesystem.rename({
+      from: fileName,
+      to: name,
+      directory: Directory.Data
+    })
+
+    const updatedPictures = pictures.map(p =>
+      p.filePath === picture.filePath ? {
+        fileName: name,
+        filePath: name, // FIXME correct path
+        webviewPath: p.webviewPath // FIXME correct path
+      } : p);
+
+    console.log({updatedPictures})
+
+    Preferences.set({
+      key: PICTURE_STORAGE,
+      value: JSON.stringify(updatedPictures)
+    });
+    setPictures(updatedPictures)
+  };
+
   return {
     pictures,
     takePicture,
+    renamePicture,
     deletePicture
   };
 }

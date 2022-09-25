@@ -16,8 +16,7 @@ import {
   IonItem,
   IonModal,
   IonLabel,
-  IonInput,
-  useIonModal
+  IonInput
 } from '@ionic/react';
 import { ellipsisHorizontal, ellipsisVertical } from 'ionicons/icons';
 import { TakenPicture } from '../hooks/usePictureGallery';
@@ -28,12 +27,13 @@ interface Props extends RouteComponentProps<{
   fileName: string;
 }> {
   pictures: TakenPicture[],
+  renamePicture(picture: TakenPicture, name: string): Promise<void>
   deletePicture(picture: TakenPicture): Promise<void>
 }
 
-const PictureDetailsPage: React.FC<Props> = ({ match, pictures, deletePicture }: Props) => {
+const PictureDetailsPage: React.FC<Props> = ({ match, pictures, renamePicture, deletePicture }: Props) => {
   const history = useHistory();
-  const input = useRef<HTMLIonInputElement>(null);
+  const input = useRef<HTMLIonInputElement>(null); // TODO extract rename modal component
   const [isRenameModalOpen, setIsRenameModalOpen] = useState<boolean>(false);
 
   const fileName = match.params.fileName;
@@ -51,10 +51,13 @@ const PictureDetailsPage: React.FC<Props> = ({ match, pictures, deletePicture }:
   };
 
   const confirmRename = () => {
-    const fileName = input.current?.value; // TODO validate
+    const fileName = '' + input.current?.value ?? 'Test.jpg'; // TODO validate
     console.log(`Rename to ${fileName}.`);
+    renamePicture(picture, fileName);
 
     setIsRenameModalOpen(false);
+
+    history.replace(`/pictures/view/${fileName}`);
   }
 
   return (
@@ -103,8 +106,8 @@ const PictureDetailsPage: React.FC<Props> = ({ match, pictures, deletePicture }:
           </IonHeader>
           <IonContent className="ion-padding">
             <IonItem>
-              <IonLabel position="floating">Enter file name</IonLabel>
-              <IonInput ref={input} type="text" placeholder="Picture.jpg" />
+              <IonLabel position="stacked">Enter file name</IonLabel>
+              <IonInput ref={input} type="text" placeholder={fileName} />
             </IonItem>
           </IonContent>
         </IonModal>
