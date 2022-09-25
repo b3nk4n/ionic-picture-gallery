@@ -1,0 +1,6 @@
+.debug-item-label {
+  max-width: 24rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

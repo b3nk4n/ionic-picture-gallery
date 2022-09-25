@@ -14,7 +14,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import { albums, images, desktop, phonePortrait } from 'ionicons/icons';
 import PictureSliderTab from './pages/PictureSliderTab';
 import PicturesTab from './pages/PicturesTab';
-import PlatformsTab from './pages/PlatformsTab';
+import DebugTab from './pages/DebugTab';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -51,8 +51,8 @@ const App: React.FC = () => {
             <Route exact path="/pictures">
               <PicturesTab />
             </Route>
-            <Route path="/platforms">
-              <PlatformsTab />
+            <Route path="/debug">
+              <DebugTab />
             </Route>
             <Route exact path="/">
               <Redirect to="/pictures" />
@@ -67,9 +67,9 @@ const App: React.FC = () => {
               <IonIcon icon={images} />
               <IonLabel>Pictures</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="platforms" href="/platforms">
+            <IonTabButton tab="debug" href="/debug">
               <IonIcon icon={platformIcon} />
-              <IonLabel>Platforms</IonLabel>
+              <IonLabel>Debug</IonLabel>
             </IonTabButton>
           </IonTabBar>
         </IonTabs>
