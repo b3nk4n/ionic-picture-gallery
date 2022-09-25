@@ -15,6 +15,7 @@ import { albums, images, desktop, phonePortrait } from 'ionicons/icons';
 import { usePictureGallery } from './hooks/usePictureGallery';
 import PictureSliderTab from './pages/PictureSliderTab';
 import PicturesTab from './pages/PicturesTab';
+import NotFoundTab from './pages/NotFoundTab';
 import DebugTab from './pages/DebugTab';
 
 /* Core CSS required for Ionic components to work properly */
@@ -62,6 +63,9 @@ const App: React.FC = () => {
             </Route>
             <Route exact path="/">
               <Redirect to="/pictures" />
+            </Route>
+            <Route>
+              <NotFoundTab />
             </Route>
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
