@@ -12,9 +12,9 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { images, triangle, desktop, phonePortrait } from 'ionicons/icons';
-import Tab1 from './pages/Tab1';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
+import PictureSliderTab from './pages/PictureSliderTab';
+import PicturesTab from './pages/PicturesTab';
+import PlatformsTab from './pages/PlatformsTab';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -46,13 +46,13 @@ const App: React.FC = () => {
         <IonTabs>
           <IonRouterOutlet>
             <Route exact path="/tab1">
-              <Tab1 />
+              <PictureSliderTab />
             </Route>
             <Route exact path="/tab2">
-              <Tab2 />
+              <PicturesTab />
             </Route>
             <Route path="/tab3">
-              <Tab3 />
+              <PlatformsTab />
             </Route>
             <Route exact path="/">
               <Redirect to="/tab1" />
