@@ -13,9 +13,10 @@ import {
 import { IonReactRouter } from '@ionic/react-router';
 import { albums, images, desktop, phonePortrait } from 'ionicons/icons';
 import { usePictureGallery } from './hooks/usePictureGallery';
+import PictureDetailsPage from './pages/PictureDetailsPage';
 import PictureSliderTab from './pages/PictureSliderTab';
+import NotFoundPage from './pages/NotFoundPage';
 import PicturesTab from './pages/PicturesTab';
-import NotFoundTab from './pages/NotFoundTab';
 import DebugTab from './pages/DebugTab';
 
 /* Core CSS required for Ionic components to work properly */
@@ -58,6 +59,12 @@ const App: React.FC = () => {
                 deletePicture={deletePicture}
               />
             </Route>
+            <Route exact path="/pictures/view/:fileName">
+              <PictureDetailsPage 
+                pictures={pictures}
+                deletePicture={deletePicture}
+              />
+            </Route>
             <Route path="/debug">
               <DebugTab pictures={pictures} />
             </Route>
@@ -65,7 +72,7 @@ const App: React.FC = () => {
               <Redirect to="/pictures" />
             </Route>
             <Route>
-              <NotFoundTab />
+              <NotFoundPage />
             </Route>
           </IonRouterOutlet>
           <IonTabBar slot="bottom">

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router';
 import {
   IonContent,
   IonHeader,
@@ -15,7 +16,7 @@ import {
   IonActionSheet,
 } from '@ionic/react';
 import { TakenPicture } from '../hooks/usePictureGallery';
-import { camera, trash, close } from 'ionicons/icons';
+import { camera, trash, close, image } from 'ionicons/icons';
 
 import './PicturesTab.css';
 
@@ -26,7 +27,8 @@ interface Props {
 }
 
 const PicturesTab: React.FC<Props> = ({ pictures, takePicture, deletePicture }: Props) => {
-  const [pictureToDelete, setPictureToDelete] = useState<TakenPicture | null>(null)
+  const history = useHistory()
+  const [selectedPicture, setSelectedPicture] = useState<TakenPicture | null>(null)
 
   return (
     <IonPage>
@@ -42,7 +44,7 @@ const PicturesTab: React.FC<Props> = ({ pictures, takePicture, deletePicture }: 
               <IonCol size="6" key={idx}>
                 <IonImg 
                   src={picture.webviewPath}
-                  onClick={() => setPictureToDelete(picture)}
+                  onClick={() => setSelectedPicture(picture)}
                 />
               </IonCol>
             ))}
@@ -56,16 +58,26 @@ const PicturesTab: React.FC<Props> = ({ pictures, takePicture, deletePicture }: 
         </IonFab>
 
         <IonActionSheet
-          isOpen={!!pictureToDelete}
+          isOpen={!!selectedPicture}
           buttons= {[
+            {
+              text: 'View',
+              role: 'descructive',
+              icon: image,
+              handler: () => {
+                if (selectedPicture) {
+                  history.push(`/pictures/view/${selectedPicture.fileName}`);
+                }
+              }
+            },
             {
               text: 'Remove',
               role: 'destructuve',
               icon: trash,
               handler: () => {
-                if (pictureToDelete) {
-                  deletePicture(pictureToDelete);
-                  setPictureToDelete(null);
+                if (selectedPicture) {
+                  deletePicture(selectedPicture);
+                  setSelectedPicture(null);
                 }
               }
             },
@@ -75,7 +87,7 @@ const PicturesTab: React.FC<Props> = ({ pictures, takePicture, deletePicture }: 
               role: 'cancel'
             }
           ]}
-          onDidDismiss={() => setPictureToDelete(null)}
+          onDidDismiss={() => setSelectedPicture(null)}
         />
       </IonContent>
     </IonPage>

@@ -1,8 +1,8 @@
 import { IonCol, IonContent, IonGrid, IonHeader, IonLabel, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
 
-import './NotFoundTab.css';
+import './NotFoundPage.css';
 
-const NotFoundTab: React.FC = () => {
+const NotFoundPage: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
@@ -23,4 +23,4 @@ const NotFoundTab: React.FC = () => {
   );
 };
 
-export default NotFoundTab;
+export default NotFoundPage;

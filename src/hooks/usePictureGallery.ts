@@ -7,6 +7,7 @@ import { Preferences } from '@capacitor/preferences';
 import { Capacitor } from '@capacitor/core';
 
 export interface TakenPicture {
+  fileName: string;
   filePath: string;
   webviewPath?: string;
 }
@@ -49,12 +50,14 @@ export function usePictureGallery() {
     if (isPlatform('hybrid')) {
       // Display new image by rewriting the file:// path to HTTP
       return {
+        fileName,
         filePath: savedFile.uri,
         webviewPath: Capacitor.convertFileSrc(savedFile.uri)
       };
     }
 
     return {
+      fileName,
       filePath: fileName,
       // Use webPath instead of base64 to display the new image since it's already loaded into memory
       webviewPath: photo.webPath,
