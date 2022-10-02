@@ -79,7 +79,7 @@ const App: React.FC = () => {
           <IonTabBar slot="bottom">
             <IonTabButton tab="picture-slider" href="/picture-slider">
               <IonIcon icon={albums} />
-              <IonLabel>Picture Slider</IonLabel>
+              <IonLabel>Slideshow</IonLabel>
             </IonTabButton>
             <IonTabButton tab="pictures" href="/pictures">
               <IonIcon icon={images} />

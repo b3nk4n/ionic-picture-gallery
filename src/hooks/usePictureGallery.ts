@@ -109,11 +109,9 @@ export function usePictureGallery() {
     const updatedPictures = pictures.map(p =>
       p.filePath === picture.filePath ? {
         fileName: name,
-        filePath: name, // FIXME correct path
-        webviewPath: p.webviewPath // FIXME correct path
+        filePath: name,
+        webviewPath: p.webviewPath
       } : p);
-
-    console.log({updatedPictures})
 
     Preferences.set({
       key: PICTURE_STORAGE,

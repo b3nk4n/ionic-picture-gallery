@@ -51,8 +51,8 @@ const PictureDetailsPage: React.FC<Props> = ({ match, pictures, renamePicture, d
   };
 
   const confirmRename = () => {
-    const fileName = '' + input.current?.value ?? 'Test.jpg'; // TODO validate
-    console.log(`Rename to ${fileName}.`);
+    const fileName = '' + input.current?.value ?? 'Test.jpg'; // TODO validate input
+
     renamePicture(picture, fileName);
 
     setIsRenameModalOpen(false);
