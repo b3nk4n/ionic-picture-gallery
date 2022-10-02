@@ -4,6 +4,7 @@ import { isPlatform } from '@ionic/react';
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
+import { Storage, Database } from '@ionic/storage';
 import { Capacitor } from '@capacitor/core';
 
 export interface TakenPicture {
@@ -14,13 +15,24 @@ export interface TakenPicture {
 
 const PICTURE_STORAGE = 'pictures';
 
+/**
+ * Preferences had some weird issues on Android that saving/loading
+ * seemed to stop working at some point for no obvious reason.
+ * However, it worked without any issues in the desktop's browser.
+ */
+export const USE_PREFERENCES = false;
+
 export function usePictureGallery() {
   const [pictures, setPictures] = useState<TakenPicture[]>([]);
+  const [picturesDb, setPicturesDb] = useState<Database | null>(null);
 
   useEffect(() => {
     const loadSaved = async () => {
-      const { value } = await Preferences.get({ key: PICTURE_STORAGE });
-      const picturesInPreferences = (value ? JSON.parse(value) : []) as TakenPicture[];
+      const store = new Storage();
+      const picturesDb = await store.create();
+      setPicturesDb(picturesDb);
+
+      const picturesInPreferences = await getPicturesFromStore(picturesDb);
 
       if (!isPlatform('hybrid')) {
         for (let picture of picturesInPreferences) {
@@ -36,6 +48,7 @@ export function usePictureGallery() {
 
       setPictures(picturesInPreferences);
     };
+
     loadSaved();
   }, []);
 
@@ -75,10 +88,7 @@ export function usePictureGallery() {
     const savedPicture = await savePicture(photo, fileName);
     const newPictures = [savedPicture, ...pictures];
     
-    Preferences.set({
-      key: PICTURE_STORAGE,
-      value: JSON.stringify(newPictures)
-    });
+    await setPicturesToStore(picturesDb, newPictures);
     setPictures(newPictures);
   };
 
@@ -91,10 +101,7 @@ export function usePictureGallery() {
       directory: Directory.Data
     });
 
-    Preferences.set({
-      key: PICTURE_STORAGE,
-      value: JSON.stringify(filteredPictures)
-    });
+    await setPicturesToStore(picturesDb, filteredPictures);
     setPictures(filteredPictures)
   };
 
@@ -113,10 +120,7 @@ export function usePictureGallery() {
         webviewPath: p.webviewPath
       } : p);
 
-    Preferences.set({
-      key: PICTURE_STORAGE,
-      value: JSON.stringify(updatedPictures)
-    });
+    await setPicturesToStore(picturesDb, updatedPictures);
     setPictures(updatedPictures)
   };
 
@@ -126,6 +130,39 @@ export function usePictureGallery() {
     renamePicture,
     deletePicture
   };
+}
+
+async function setPicturesToStore(db: Database, value: TakenPicture[]): Promise<void> {
+  const jsonValue = JSON.stringify(value);
+
+  if (USE_PREFERENCES) {
+    await Preferences.set({
+      key: PICTURE_STORAGE,
+      value: jsonValue
+    });
+  } else {
+    await db.set(PICTURE_STORAGE, jsonValue);
+  }
+}
+
+async function getPicturesFromStore(db: Database): Promise<TakenPicture[]> {
+  if (USE_PREFERENCES) {
+    const { value } = await Preferences.get({ key: PICTURE_STORAGE });
+    return (value ? JSON.parse(value) : []) as TakenPicture[];
+  }
+
+  if (db == null) {
+    return [];
+  }
+
+  console.log({db});
+  const length = await db.length();
+  if (length == 0) {
+    return [];
+  }
+
+  const value = await db.get(PICTURE_STORAGE);
+  return (value ? JSON.parse(value) : []) as TakenPicture[];
 }
 
 async function base64FromPath(path: string): Promise<string> {

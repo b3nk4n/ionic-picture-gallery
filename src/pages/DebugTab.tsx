@@ -10,7 +10,7 @@ import {
   getPlatforms, 
   IonListHeader
 } from '@ionic/react';
-import { TakenPicture } from '../hooks/usePictureGallery';
+import { TakenPicture, USE_PREFERENCES } from '../hooks/usePictureGallery';
 
 import './DebugTab.css';
 
@@ -38,7 +38,7 @@ const DebugTab: React.FC<Props> = ({ pictures }: Props) => (
       </IonList>
 
       <IonListHeader>
-        <IonLabel>Picture Data</IonLabel>
+        <IonLabel>{`Picture Data (from ${USE_PREFERENCES ? 'Prefs' : 'Storage'})`}</IonLabel>
       </IonListHeader>
       <IonList>
         {pictures.map(picture => (
