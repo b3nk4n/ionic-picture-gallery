@@ -50,7 +50,7 @@ const App: React.FC = () => {
         <IonTabs>
           <IonRouterOutlet>
             <Route exact path="/picture-slider">
-              <PictureSliderTab />
+              <PictureSliderTab pictures={pictures} />
             </Route>
             <Route exact path="/pictures">
               <PicturesTab
