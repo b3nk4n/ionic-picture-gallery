@@ -44,9 +44,8 @@ const DebugTab: React.FC<Props> = ({ pictures }: Props) => (
         {pictures.map(picture => (
           <IonItem key={picture.filePath}>
             <div>
-              <IonLabel className='debug-item-label'>{picture.fileName}</IonLabel>
-              <IonLabel className='debug-item-label'>{picture.filePath}</IonLabel>
-              <IonLabel className='debug-item-label'>{picture.webviewPath}</IonLabel>
+              <IonLabel className='debug-item-label'>{`File name: ${picture.fileName}`}</IonLabel>
+              <IonLabel className='debug-item-label'>{`File path: ${picture.filePath}`}</IonLabel>
             </div>
           </IonItem>
         ))}
