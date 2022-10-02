@@ -7,7 +7,12 @@ guide, but with a few extensions, such as:
 - Back button
 - Rename picture functionality
 - Picture slider using [Swiper.js](https://swiperjs.com/)
+- Service worker with _Install app_ prompt
 - Debug tab to show currently used platform
+
+### Demo
+
+Check out the app: https://ionic-picture-gallery.web.app
 
 ### Getting started
 
