@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { RouteComponentProps, useHistory, withRouter } from 'react-router';
 import { 
   IonContent, 
@@ -13,15 +13,11 @@ import {
   IonButton,
   IonPopover,
   IonList,
-  IonItem,
-  IonModal,
-  IonLabel,
-  IonInput,
-  useIonToast
+  IonItem
 } from '@ionic/react';
 import { ellipsisHorizontal, ellipsisVertical } from 'ionicons/icons';
 import { TakenPicture } from '../hooks/usePictureGallery';
-import { isBlank } from '../utils/stringUtils';
+import RenameDialog from '../components/RenameDialog';
 
 import './PictureDetailsPage.css';
 
@@ -35,9 +31,7 @@ interface Props extends RouteComponentProps<{
 
 const PictureDetailsPage: React.FC<Props> = ({ match, pictures, renamePicture, deletePicture }: Props) => {
   const history = useHistory();
-  const input = useRef<HTMLIonInputElement>(null); // TODO extract rename modal component
   const [isRenameModalOpen, setIsRenameModalOpen] = useState<boolean>(false);
-  const [showToast] = useIonToast();
 
   const fileName = match.params.fileName;
   const filterdPictures = pictures.filter(p => p.fileName === fileName);
@@ -53,14 +47,7 @@ const PictureDetailsPage: React.FC<Props> = ({ match, pictures, renamePicture, d
     history.goBack();
   };
 
-  const confirmRename = () => {
-    const newFileName = '' + input.current?.value;
-
-    if (isBlank(newFileName)) {
-      showToast('Renaming failed: file name should not be blank.', 3000)
-      return;
-    }
-
+  const renameFile = (newFileName: string) => {
     renamePicture(picture, newFileName);
 
     setIsRenameModalOpen(false);
@@ -98,27 +85,12 @@ const PictureDetailsPage: React.FC<Props> = ({ match, pictures, renamePicture, d
       <IonContent fullscreen>
         <IonImg src={picture.webviewPath} />
 
-        <IonModal isOpen={isRenameModalOpen} trigger="open" onIonModalDidDismiss={() => setIsRenameModalOpen(false)}>
-          <IonHeader>
-            <IonToolbar>
-              <IonButtons slot="start">
-                <IonButton onClick={() => setIsRenameModalOpen(false)}>Cancel</IonButton>
-              </IonButtons>
-              <IonTitle>Rename</IonTitle>
-              <IonButtons slot="end">
-                <IonButton strong={true} onClick={confirmRename}>
-                  Confirm
-                </IonButton>
-              </IonButtons>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent className="ion-padding">
-            <IonItem>
-              <IonLabel position="stacked">Enter file name</IonLabel>
-              <IonInput ref={input} type="text" placeholder={fileName} />
-            </IonItem>
-          </IonContent>
-        </IonModal>
+        <RenameDialog 
+          open={isRenameModalOpen}
+          placeholder={fileName}
+          onConfirm={renameFile}
+          onCancel={() => setIsRenameModalOpen(false)}
+        />
       </IonContent>
     </IonPage>
   );
