@@ -12,8 +12,8 @@ const AppUpdater: React.FC = () => {
     const [ showToast ] = useIonToast();
 
     const onServiceWorkerUpdate = (registration: ServiceWorkerRegistration) => {
-        setShowUpdate(true)
-        serviceWorker = registration.waiting
+        setShowUpdate(true);
+        serviceWorker = registration.waiting;
     };
     
     const onServiceWorkerSuccess = () => {
@@ -50,29 +50,33 @@ const AppUpdater: React.FC = () => {
     }
 
     return (
-        <>
-            <IonAlert
-                isOpen={showUpdate}
-                onDidDismiss={() => setShowUpdate(false)}
-                header="Update available"
-                message="An updated version of this app is available. Do you want to update now?"
-                buttons={[
-                    {
-                        text: 'Cancel',
-                        role: 'cancel',
-                        cssClass: 'secondary',
-                        handler: () => setShowUpdate(false)
-                    },
-                    {
-                        text: 'Ok',
-                        handler: () => {
-                            setShowUpdate(false);
-                            updateServiceWorker();
-                        }
+        <IonAlert
+            isOpen={showUpdate}
+            backdropDismiss={false}
+            onDidDismiss={() => setShowUpdate(false)}
+            header="Update"
+            subHeader="An updated version of this app is available"
+            message="Do you want to update now?"
+            buttons={[
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: () => {
+                        // If rejected, the dialog will show up once again in 24h
+                        // after the version expires from the cache. 
+                        setShowUpdate(false);
                     }
-                ]}
-            />
-        </>
+                },
+                {
+                    text: 'Ok',
+                    handler: () => {
+                        setShowUpdate(false);
+                        updateServiceWorker();
+                    }
+                }
+            ]}
+        />
     );
 };
 

@@ -7,7 +7,7 @@ guide, but with a few extensions, such as:
 - Back button
 - Rename picture functionality
 - Picture slider using [Swiper.js](https://swiperjs.com/)
-- Service worker with _Install app_ prompt
+- Service worker with _Install app_ and _Update app_ prompts
 - Toast notifications
 - Debug tab to show currently used platform
 

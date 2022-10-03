@@ -155,7 +155,6 @@ async function getPicturesFromStore(db: Database): Promise<TakenPicture[]> {
     return [];
   }
 
-  console.log({db});
   const length = await db.length();
   if (length == 0) {
     return [];

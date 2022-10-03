@@ -1,6 +1,6 @@
 {
   "name": "ionic-picture-gallery",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@capacitor/android": "4.2.0",
@@ -52,7 +52,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons)/)'",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "get-version": "echo $npm_package_version"
   },
   "eslintConfig": {
     "extends": [
