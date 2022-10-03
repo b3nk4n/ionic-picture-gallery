@@ -8,6 +8,7 @@ guide, but with a few extensions, such as:
 - Rename picture functionality
 - Picture slider using [Swiper.js](https://swiperjs.com/)
 - Service worker with _Install app_ prompt
+- Toast notifications
 - Debug tab to show currently used platform
 
 ### Demo

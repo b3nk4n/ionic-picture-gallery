@@ -16,10 +16,12 @@ import {
   IonItem,
   IonModal,
   IonLabel,
-  IonInput
+  IonInput,
+  useIonToast
 } from '@ionic/react';
 import { ellipsisHorizontal, ellipsisVertical } from 'ionicons/icons';
 import { TakenPicture } from '../hooks/usePictureGallery';
+import { isBlank } from '../utils/stringUtils';
 
 import './PictureDetailsPage.css';
 
@@ -35,6 +37,7 @@ const PictureDetailsPage: React.FC<Props> = ({ match, pictures, renamePicture, d
   const history = useHistory();
   const input = useRef<HTMLIonInputElement>(null); // TODO extract rename modal component
   const [isRenameModalOpen, setIsRenameModalOpen] = useState<boolean>(false);
+  const [showToast] = useIonToast();
 
   const fileName = match.params.fileName;
   const filterdPictures = pictures.filter(p => p.fileName === fileName);
@@ -51,13 +54,18 @@ const PictureDetailsPage: React.FC<Props> = ({ match, pictures, renamePicture, d
   };
 
   const confirmRename = () => {
-    const fileName = '' + input.current?.value ?? 'Test.jpg'; // TODO validate input
+    const newFileName = '' + input.current?.value;
 
-    renamePicture(picture, fileName);
+    if (isBlank(newFileName)) {
+      showToast('Renaming failed: file name should not be blank.', 3000)
+      return;
+    }
+
+    renamePicture(picture, newFileName);
 
     setIsRenameModalOpen(false);
 
-    history.replace(`/pictures/view/${fileName}`);
+    history.replace(`/pictures/view/${newFileName}`);
   }
 
   return (
