@@ -15,6 +15,7 @@ import { albums, images, desktop, phonePortrait } from 'ionicons/icons';
 import { usePictureGallery } from './hooks/usePictureGallery';
 import PictureDetailsPage from './pages/PictureDetailsPage';
 import PictureSliderTab from './pages/PictureSliderTab';
+import AppUpdater from './components/AppUpdater';
 import NotFoundPage from './pages/NotFoundPage';
 import PicturesTab from './pages/PicturesTab';
 import DebugTab from './pages/DebugTab';
@@ -45,54 +46,57 @@ const App: React.FC = () => {
   const platformIcon = isPlatform('hybrid') ? phonePortrait : desktop;
 
   return (
-    <IonApp>
-      <IonReactRouter>
-        <IonTabs>
-          <IonRouterOutlet>
-            <Route exact path="/picture-slider">
-              <PictureSliderTab pictures={pictures} />
-            </Route>
-            <Route exact path="/pictures">
-              <PicturesTab
-                pictures={pictures}
-                takePicture={takePicture}
-                deletePicture={deletePicture}
-              />
-            </Route>
-            <Route exact path="/pictures/view/:fileName">
-              <PictureDetailsPage 
-                pictures={pictures}
-                renamePicture={renamePicture}
-                deletePicture={deletePicture}
-              />
-            </Route>
-            <Route path="/debug">
-              <DebugTab pictures={pictures} />
-            </Route>
-            <Route exact path="/">
-              <Redirect to="/pictures" />
-            </Route>
-            <Route>
-              <NotFoundPage />
-            </Route>
-          </IonRouterOutlet>
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="picture-slider" href="/picture-slider">
-              <IonIcon icon={albums} />
-              <IonLabel>Slideshow</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="pictures" href="/pictures">
-              <IonIcon icon={images} />
-              <IonLabel>Pictures</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="debug" href="/debug">
-              <IonIcon icon={platformIcon} />
-              <IonLabel>Debug</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
-      </IonReactRouter>
-    </IonApp>
+    <>
+      <AppUpdater />
+      <IonApp>
+        <IonReactRouter>
+          <IonTabs>
+            <IonRouterOutlet>
+              <Route exact path="/picture-slider">
+                <PictureSliderTab pictures={pictures} />
+              </Route>
+              <Route exact path="/pictures">
+                <PicturesTab
+                  pictures={pictures}
+                  takePicture={takePicture}
+                  deletePicture={deletePicture}
+                />
+              </Route>
+              <Route exact path="/pictures/view/:fileName">
+                <PictureDetailsPage 
+                  pictures={pictures}
+                  renamePicture={renamePicture}
+                  deletePicture={deletePicture}
+                />
+              </Route>
+              <Route path="/debug">
+                <DebugTab pictures={pictures} />
+              </Route>
+              <Route exact path="/">
+                <Redirect to="/pictures" />
+              </Route>
+              <Route>
+                <NotFoundPage />
+              </Route>
+            </IonRouterOutlet>
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="picture-slider" href="/picture-slider">
+                <IonIcon icon={albums} />
+                <IonLabel>Slideshow</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab="pictures" href="/pictures">
+                <IonIcon icon={images} />
+                <IonLabel>Pictures</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab="debug" href="/debug">
+                <IonIcon icon={platformIcon} />
+                <IonLabel>Debug</IonLabel>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </IonReactRouter>
+      </IonApp>
+    </>
   );
 };
 
